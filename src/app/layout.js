@@ -1,6 +1,7 @@
 import {Inter, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 const interFont = Inter({
   variable: "--font-inter",
@@ -25,6 +26,8 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col font-sans">
         
+        <Navbar/>
+
        <main className="grow">
          {children}
        </main>
