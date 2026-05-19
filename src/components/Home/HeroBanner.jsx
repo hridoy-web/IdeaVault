@@ -79,11 +79,11 @@ const HeroBanner = () => {
                     </p>
                   </div>
 
-                  {/* CTA btn */}
+                  {/* CTA Button */}
                   <div className="pt-2">
                     <Link
                       href="/ideas"
-                      className="btn bg-[#006eff] hover:bg-[#005fd8] hover:scale-105 text-white border-[#005fd8] px-8 py-3 rounded-xl font-bold tracking-wide text-sm uppercase transition-all shadow-lg shadow-blue-600/20"
+                      className="btn bg-linear-to-r from-[#006eff] to-indigo-600 hover:bg-[#005fd8] hover:scale-105 text-white border-[#005fd8] px-8 py-3 rounded-xl font-semibold tracking-wide text-sm uppercase transition-all shadow-lg shadow-blue-600/20"
                     >
                       Explore Ideas <FaArrowRightLong size={15} />
                     </Link>
