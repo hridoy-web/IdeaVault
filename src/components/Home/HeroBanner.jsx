@@ -31,7 +31,7 @@ const HeroBanner = () => {
   ];
 
   return (
-    <main className="w-full min-h-screen bg-slate-50 text-slate-800">
+    <main className="w-full bg-slate-50 text-slate-800">
 
       {/* Banner Section */}
       <section className="w-full bg-white border-b border-slate-200">
@@ -50,16 +50,16 @@ const HeroBanner = () => {
           {slides.map((slide, index) => (
             <SwiperSlide key={index} className="relative w-full h-full bg-slate-900 text-white">
 
-              {/* Slider Background Image */}
+              {/* Slider Image */}
               <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url('${slide.image}')` }}
               />
 
-              {/* Dark Overlay for Text Readability */}
+              {/* Dark Overlay */}
               <div className="absolute inset-0 bg-linear-to-r from-slate-950/85 via-slate-950/60 to-transparent" />
 
-              {/* Slider Container */}
+              {/* Container */}
               <div className="relative z-10 w-11/12  mx-auto h-full flex items-center box-border">
                 <div className="max-w-2xl space-y-6 px-2 md:px-6">
 
@@ -79,7 +79,7 @@ const HeroBanner = () => {
                     </p>
                   </div>
 
-                  {/* CTA Button */}
+                  {/* CTA btn */}
                   <div className="pt-2">
                     <Link
                       href="/ideas"
