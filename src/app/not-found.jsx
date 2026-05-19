@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HiHome, HiArrowLeft } from "react-icons/hi";
+import { HiHome } from "react-icons/hi";
 
 const NotFoundPage = () => {
     return (
