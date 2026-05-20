@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Card = ({ idea }) => {
+
     return (
         <div
             className="bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:bg-white hover:border-[#006eff]/30 hover:-translate-y-1 group overflow-hidden"
@@ -54,7 +55,7 @@ const Card = ({ idea }) => {
                             {/* Audience */}
                             <div>
                                 <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block">Target Audience</span>
-                                <span className="text-sm font-bold text-slate-800 truncate block">{idea.audience}</span>
+                                <span className="text-sm font-bold text-slate-800 truncate block">{idea.targetAudience}</span>
                             </div>
 
                         </div>

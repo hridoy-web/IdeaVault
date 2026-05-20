@@ -1,61 +1,13 @@
-"use client";
+
 
 import Link from "next/link";
 import { FaRegLightbulb } from "react-icons/fa6";
 import Card from "../UI/Card";
+import { fetchTrendingIdeas } from "@/lib/ideas/data";
 
-const TrendingIdeas = () => {
-   
-    const trendingIdeas = [
-        {
-            _id: "1",
-            title: "AI Crop Disease Detector",
-            category: "Artificial Intelligence",
-            problem: "Local farmers face massive crop loss due to delayed disease identification.",
-            budget: "$5,000",
-            audience: "Local Farmers & Agri-Dealers",
-        },
-        {
-            _id: "2",
-            title: "Micro-Investing App for Students",
-            category: "FinTech",
-            problem: "University students lack accessible and automated micro-investment habits.",
-            budget: "$3,500",
-            audience: "College & University Students",
-        },
-        {
-            _id: "3",
-            title: "Smart Waste Management Ecosystem",
-            category: "Sustainability",
-            problem: "Urban areas suffer from unorganized recycling and zero resident rewards.",
-            budget: "$8,000",
-            audience: "Municipalities & Smart Citizens",
-        },
-        {
-            _id: "4",
-            title: "Decentralized Medical Record Ledger",
-            category: "Healthcare",
-            problem: "Patients face severe security risks while sharing health histories across hospitals.",
-            budget: "$12,000",
-            audience: "Hospitals & Private Patients",
-        },
-        {
-            _id: "5",
-            title: "Gamified Language Learning App",
-            category: "Education",
-            problem: "Indigenous languages are dying out due to lack of interactive learning tools.",
-            budget: "$2,500",
-            audience: "Language Enthusiasts & Kids",
-        },
-        {
-            _id: "6",
-            title: "IoT Autonomous Water Grid Tester",
-            category: "Hardware & Tech",
-            problem: "Rural communities consume contaminated water due to lack of real-time testing.",
-            budget: "$9,500",
-            audience: "NGOs & Rural Communities",
-        },
-    ];
+const TrendingIdeas = async () => {
+
+    const trendingIdeas = await fetchTrendingIdeas();
 
     return (
         <section className="w-full bg-white py-16 text-slate-800">
@@ -90,7 +42,8 @@ const TrendingIdeas = () => {
                 {/* Ideas card Grid Layout */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {
-                        trendingIdeas.map((idea) => <Card  key={idea._id} idea={idea} /> )}
+                        trendingIdeas?.map(idea => <Card key={idea._id} idea={idea} />)
+                    }
                 </div>
 
             </div>
