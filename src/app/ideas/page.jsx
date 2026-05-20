@@ -5,7 +5,7 @@ import { fetchIdeas } from "@/lib/ideas/data";
 const AllIdeasPage = async () => {
 
     const ideas = await fetchIdeas();
-    console.log(ideas);
+    // console.log(ideas);
 
     // // Search and Filter 
     // const [searchQuery, setSearchQuery] = useState("");

@@ -8,6 +8,7 @@ import { fetchTrendingIdeas } from "@/lib/ideas/data";
 const TrendingIdeas = async () => {
 
     const trendingIdeas = await fetchTrendingIdeas();
+    // console.log(trendingIdeas);
 
     return (
         <section className="w-full bg-white py-16 text-slate-800">

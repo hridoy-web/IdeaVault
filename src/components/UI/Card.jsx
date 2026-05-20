@@ -3,6 +3,8 @@ import Image from "next/image";
 
 const Card = ({ idea }) => {
 
+    const { ideaTitle, category, imageURL, estimatedBudget, targetAudience, problemStatement } = idea;
+
     return (
         <div
             className="bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:bg-white hover:border-[#006eff]/30 hover:-translate-y-1 group overflow-hidden"
@@ -11,8 +13,8 @@ const Card = ({ idea }) => {
 
                 <div className="w-full h-48 bg-slate-200 relative overflow-hidden shrink-0">
                     <Image
-                        src={idea.imageUrl || "https://i.ibb.co.com/bgS6dHSp/gpt-image-2-A-realistic-wide-angle-cinematic-photo-of-a-startup-team-conducting-a-serious-bu-0.jpg"}
-                        alt={idea.title}
+                        src={imageURL || "https://i.ibb.co.com/bgS6dHSp/gpt-image-2-A-realistic-wide-angle-cinematic-photo-of-a-startup-team-conducting-a-serious-bu-0.jpg"}
+                        alt={ideaTitle}
                         fill
                         sizes="(max-w-7xl) 33vw, (max-w-md) 50vw, 100vw"
                         priority={true}
@@ -23,14 +25,14 @@ const Card = ({ idea }) => {
                     {/* Category badge */}
                     <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-md border border-slate-200/50 text-[#006eff] px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wide shadow-sm z-10">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#006eff] animate-pulse"></span>
-                        {idea.category}
+                        {category}
                     </span>
                 </div>
 
                 <div className="p-6 md:p-8 space-y-4">
                     {/* Title */}
                     <h3 className="text-xl font-bold text-slate-900 tracking-tight leading-snug group-hover:text-[#006eff] transition-colors line-clamp-1">
-                        {idea.title}
+                        {ideaTitle}
                     </h3>
 
                     {/* Info Section */}
@@ -40,7 +42,7 @@ const Card = ({ idea }) => {
                         <div className="space-y-1">
                             <span className="text-[11px] uppercase tracking-wider font-black text-slate-400 block">The Problem</span>
                             <p className="text-sm text-slate-700 leading-relaxed line-clamp-2">
-                                {idea.problem}
+                                {problemStatement}
                             </p>
                         </div>
 
@@ -49,13 +51,13 @@ const Card = ({ idea }) => {
                             {/* Budget */}
                             <div>
                                 <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block">Est. Budget</span>
-                                <span className="text-sm font-bold text-slate-800">{idea.budget}</span>
+                                <span className="text-sm font-bold text-slate-800">{estimatedBudget}</span>
                             </div>
 
                             {/* Audience */}
                             <div>
                                 <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block">Target Audience</span>
-                                <span className="text-sm font-bold text-slate-800 truncate block">{idea.targetAudience}</span>
+                                <span className="text-sm font-bold text-slate-800 truncate block">{targetAudience}</span>
                             </div>
 
                         </div>
