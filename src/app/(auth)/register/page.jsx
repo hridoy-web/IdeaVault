@@ -1,44 +1,32 @@
-"use client";
-
-import { useState } from "react";
+"use client"
+import { signUp } from "@/lib/auth-client";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
-    const [errorMsg, setErrorMsg] = useState("");
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
-        setErrorMsg("");
 
-        const name = e.target.name.value;
-        const email = e.target.email.value;
-        const photoUrl = e.target.photoUrl.value;
-        const password = e.target.password.value;
+        const formData = new FormData(e.currentTarget);
+        const registration = Object.fromEntries(formData.entries());
 
-        // 1. Length check (Minimum 6 characters)
-        if (password.length < 6) {
-            setErrorMsg("Password must be at least 6 characters long.");
+        const { name, email, photoUrl, password } = registration;
+        // console.log(registration);
+
+        const { data, error } = await signUp.email({
+            email,
+            password,
+            name,
+            photoUrl
+        })
+
+        if (error) {
+            toast.error(error.message)
             return;
         }
-
-        // 2. Uppercase letter check (A-Z)
-        const hasUpperCase = /[A-Z]/.test(password);
-        if (hasUpperCase === false) {
-            setErrorMsg("Password must include at least one uppercase letter.");
-            return;
-        }
-
-        // 3. Lowercase letter check (a-z)
-        const hasLowerCase = /[a-z]/.test(password);
-        if (hasLowerCase === false) {
-            setErrorMsg("Password must include at least one lowercase letter.");
-            return;
-        }
-
-
-        console.log("Registration form validated successfully:", { name, email, photoUrl, password });
-        // Sign up logic 
+        window.location.href = "/";
     };
 
     const handleGoogleRegister = () => {
@@ -58,11 +46,11 @@ const RegisterPage = () => {
 
 
                 {/* Custom Error Alert */}
-                {errorMsg && (
+                {/* {errorMsg && (
                     <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-xl text-xs font-semibold leading-relaxed">
                         {errorMsg}
                     </div>
-                )}
+                )} */}
 
                 {/* Form */}
                 <form onSubmit={handleRegister} className="space-y-4">
