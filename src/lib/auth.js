@@ -6,11 +6,13 @@ const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db('ideaVaultDB');
 
 export const auth = betterAuth({
-  database: mongodbAdapter(db, {
-    
-    client
-  }),
-    emailAndPassword: {    
-        enabled: true
-    } 
+  database: mongodbAdapter(db),
+  emailAndPassword: {
+    enabled: true
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 5 * 24 * 60 * 60 
+  },
+  secret: process.env.BETTER_AUTH_SECRET
 });

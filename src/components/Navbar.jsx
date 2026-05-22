@@ -20,15 +20,19 @@ const Navbar = () => {
     <li className={`font-bold transition-all duration-300 ${pathName === '/ideas' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
       <Link href={'/ideas'}>Ideas</Link>
     </li>
-    <li className={`font-bold transition-all duration-300 ${pathName === '/add-idea' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
-      <Link href={'/add-idea'}>Add Idea</Link>
-    </li>
-    <li className={`font-bold transition-all duration-300 ${pathName === '/my-ideas' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
-      <Link href={'/my-ideas'}>My Ideas</Link>
-    </li>
-    <li className={`font-bold transition-all duration-300 ${pathName === '/my-interactions' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
-      <Link href={'/my-interactions'}>My Interactions</Link>
-    </li>
+    {user && (
+      <>
+        <li className={`font-bold transition-all duration-300 ${pathName === '/add-idea' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
+          <Link href={'/add-idea'}>Add Idea</Link>
+        </li>
+        <li className={`font-bold transition-all duration-300 ${pathName === '/my-ideas' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
+          <Link href={'/my-ideas'}>My Ideas</Link>
+        </li>
+        <li className={`font-bold transition-all duration-300 ${pathName === '/my-interactions' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
+          <Link href={'/my-interactions'}>My Interactions</Link>
+        </li>
+      </>
+    )}
   </>
 
   const handleLogOut = async () => {
@@ -37,10 +41,10 @@ const Navbar = () => {
   }
 
   return (
-
+   
     <div className="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-[0_2px_20px_rgba(0,0,0,0.03)]">
       <div className="navbar w-11/12 mx-auto h-16">
-
+        
         {/* Navbar Start Section */}
         <div className="navbar-start gap-2 md:gap-0">
           <div className="dropdown">
@@ -53,7 +57,7 @@ const Navbar = () => {
               {navLinkStyles}
             </ul>
           </div>
-
+          
           {/* Logo */}
           <Link href={'/'} className="flex items-center space-x-2 font-black text-xl md:text-2xl tracking-tight text-slate-900 group">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
@@ -121,8 +125,8 @@ const Navbar = () => {
                     </button>
                   </Link>
 
-                  <button
-                    onClick={handleLogOut}
+                  <button 
+                    onClick={handleLogOut} 
                     className="w-full py-2 px-3 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-center"
                   >
                     Log Out

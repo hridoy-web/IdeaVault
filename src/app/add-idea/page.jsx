@@ -1,16 +1,26 @@
 "use client";
 
+import { createIdea } from "@/lib/ideas/data";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
 const AddIdeaPage = () => {
-  const handleSubmit = (e) => {
+  const router = useRouter();
+
+  const handleAddIdea = async (e) => {
     e.preventDefault();
     
     // Form data collection 
     const formData = new FormData(e.target);
     const ideaData = Object.fromEntries(formData.entries());
     
-    console.log("Submitted Idea Data:", ideaData);
-    
-    // backend
+    // backend data 
+    const result = await createIdea(ideaData);
+    if(result){
+      toast.success("Your idea added successfully!");
+      e.target.reset();
+      router.push('/ideas');
+    }
   };
 
   return (
@@ -28,7 +38,7 @@ const AddIdeaPage = () => {
         </div>
 
         {/* Form  */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleAddIdea} className="space-y-6">
           
           {/* Grid Container  */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -40,7 +50,7 @@ const AddIdeaPage = () => {
               </label>
               <input 
                 type="text" 
-                name="title" 
+                name="ideaTitle" 
                 required
                 placeholder="e.g., AI Crop Disease Detector" 
                 className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
@@ -75,7 +85,7 @@ const AddIdeaPage = () => {
               </label>
               <input 
                 type="text" 
-                name="shortDesc" 
+                name="shortDescription" 
                 required
                 placeholder="A precise one-line punchline of your startup concept" 
                 className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
@@ -89,7 +99,7 @@ const AddIdeaPage = () => {
               </label>
               <input 
                 type="url" 
-                name="imageUrl" 
+                name="imageURL"
                 required
                 placeholder="https://example.com/image.jpg" 
                 className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
@@ -103,27 +113,27 @@ const AddIdeaPage = () => {
               </label>
               <input 
                 type="text" 
-                name="audience" 
+                name="targetAudience" 
                 required
                 placeholder="e.g., Local Farmers, University Students" 
                 className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
               />
             </div>
 
-            {/* 6. Estimated Budget (Optional) */}
+            {/* 6. Estimated Budget */}
             <div className="form-control w-full space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Estimated Budget <span className="text-slate-400">(Optional)</span>
               </label>
               <input 
                 type="text" 
-                name="budget" 
+                name="estimatedBudget" 
                 placeholder="e.g., $5,000" 
                 className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
               />
             </div>
 
-            {/* 7. Tags (Optional) */}
+            {/* 7. Tags */}
             <div className="form-control w-full space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Tags <span className="text-slate-400">(Optional)</span>
@@ -142,7 +152,7 @@ const AddIdeaPage = () => {
                 Problem Statement <span className="text-red-500">*</span>
               </label>
               <textarea 
-                name="problem" 
+                name="problemStatement"
                 required
                 rows="3"
                 placeholder="Clearly describe the exact problem or paint point your audience is facing..." 
@@ -156,7 +166,7 @@ const AddIdeaPage = () => {
                 Proposed Solution <span className="text-red-500">*</span>
               </label>
               <textarea 
-                name="solution" 
+                name="proposedSolution" 
                 required
                 rows="3"
                 placeholder="Detail how your concept addresses the problem seamlessly..." 
@@ -170,7 +180,7 @@ const AddIdeaPage = () => {
                 Detailed Description <span className="text-red-500">*</span>
               </label>
               <textarea 
-                name="detailedDesc" 
+                name="detailedDescription" 
                 required
                 rows="4"
                 placeholder="Provide a comprehensive operational roadmap of your startup concept..." 

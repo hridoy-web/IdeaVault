@@ -1,11 +1,14 @@
 "use client";
 
-import { signIn } from "@/lib/auth-client";
+import { authClient, signIn } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
+
+  const router = useRouter()
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,16 +20,22 @@ const LoginPage = () => {
       ...loginData
     })
 
+    const { data: tokenData } = await authClient.token()
+    console.log(data);
+
     if (error) {
       toast.error(error.message)
       return;
     }
-    window.location.href = "/";
+    toast.success("Successfully logged in!");
+    router.push('/')
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google Login Triggered");
-    // Google Sign-In Logic
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/"
+    });
   };
 
   return (

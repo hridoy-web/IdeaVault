@@ -12,14 +12,8 @@ const RegisterPage = () => {
         const formData = new FormData(e.currentTarget);
         const registration = Object.fromEntries(formData.entries());
 
-        const { name, email, photoUrl, password } = registration;
-        // console.log(registration);
-
         const { data, error } = await signUp.email({
-            email,
-            password,
-            name,
-            photoUrl
+           ...registration
         })
 
         if (error) {
@@ -30,7 +24,7 @@ const RegisterPage = () => {
     };
 
     const handleGoogleRegister = () => {
-        console.log("Google Registration Triggered");
+        // console.log("Google Registration Triggered");
         //  Google Auth Integration
     };
 
@@ -80,7 +74,7 @@ const RegisterPage = () => {
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Photo URL</label>
                         <input
                             type="url"
-                            name="photoUrl"
+                            name="image"
                             required
                             placeholder="https://example.com/profile.jpg"
                             className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"

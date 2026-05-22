@@ -51,7 +51,7 @@ const Card = ({ idea }) => {
                             {/* Budget */}
                             <div>
                                 <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block">Est. Budget</span>
-                                <span className="text-sm font-bold text-slate-800">{estimatedBudget}</span>
+                                <span className="text-sm font-bold text-slate-800">${estimatedBudget}</span>
                             </div>
 
                             {/* Audience */}
