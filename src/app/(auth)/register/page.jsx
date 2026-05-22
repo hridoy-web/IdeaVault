@@ -1,31 +1,62 @@
 "use client"
-import { signUp } from "@/lib/auth-client";
+import { signUp, signIn } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
+    const router = useRouter();
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
-        const registration = Object.fromEntries(formData.entries());
+        const { name, email, image, password } = Object.fromEntries(formData.entries());
 
-        const { data, error } = await signUp.email({
-           ...registration
-        })
-
-        if (error) {
-            toast.error(error.message)
+        // Password Length Validation
+        if (password.length < 6) {
+            toast.error("Password must be at least 6 characters long!");
             return;
         }
-        window.location.href = "/";
+
+        // Uppercase Letter Validation
+        if (!/[A-Z]/.test(password)) {
+            toast.error("Password must include at least one uppercase letter!");
+            return;
+        }
+
+        // Lowercase Letter Validation
+        if (!/[a-z]/.test(password)) {
+            toast.error("Password must include at least one lowercase letter!");
+            return;
+        }
+
+        // authentication request
+        const { data, error } = await signUp.email({
+            name,
+            email,
+            password,
+            image
+        });
+
+        if (error) {
+            toast.error(error.message);
+            return;
+        }
+        toast.success("Registration successful!");
+        router.push("/");
     };
 
-    const handleGoogleRegister = () => {
-        // console.log("Google Registration Triggered");
-        //  Google Auth Integration
+    const handleGoogleRegister = async () => {
+        try {
+            await signIn.social({
+                provider: "google",
+                callbackURL: "/",
+            });
+        } catch (error) {
+            toast.error("Google registration failed!");
+        }
     };
 
     return (
@@ -37,14 +68,6 @@ const RegisterPage = () => {
                     <h2 className="text-2xl font-black tracking-tight text-slate-900">Join IdeaVault</h2>
                     <p className="text-slate-400 text-xs uppercase tracking-wider font-bold">Start sharing Your Unique StartUp Idea</p>
                 </div>
-
-
-                {/* Custom Error Alert */}
-                {/* {errorMsg && (
-                    <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-xl text-xs font-semibold leading-relaxed">
-                        {errorMsg}
-                    </div>
-                )} */}
 
                 {/* Form */}
                 <form onSubmit={handleRegister} className="space-y-4">
@@ -115,8 +138,7 @@ const RegisterPage = () => {
                     <span>Sign up with Google</span>
                 </button>
 
-
-                {/* Redirect Link */}
+                {/* Redirect Link btn */}
                 <p className="text-center text-sm text-slate-500 font-medium">
                     Already have an account?{" "}
                     <Link href="/login" className="text-[#006eff] font-bold hover:underline">

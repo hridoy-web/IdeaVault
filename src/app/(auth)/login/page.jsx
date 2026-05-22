@@ -1,14 +1,13 @@
 "use client";
 
-import { authClient, signIn } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
-
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,24 +17,26 @@ const LoginPage = () => {
 
     const { data, error } = await signIn.email({
       ...loginData
-    })
-
-    const { data: tokenData } = await authClient.token()
-    console.log(data);
+    });
 
     if (error) {
-      toast.error(error.message)
+      toast.error(error.message);
       return;
     }
+
     toast.success("Successfully logged in!");
-    router.push('/')
+    router.push('/');
   };
 
   const handleGoogleLogin = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/"
-    });
+    try {
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/",
+      });
+    } catch (error) {
+      toast.error("Google login failed!");
+    }
   };
 
   return (
