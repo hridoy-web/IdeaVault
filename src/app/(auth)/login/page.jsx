@@ -19,6 +19,9 @@ const LoginPage = () => {
       ...loginData
     });
 
+    // const { data: tokenData } = await authClient.token();
+    // console.log(tokenData);
+
     if (error) {
       toast.error(error.message);
       return;
@@ -26,6 +29,7 @@ const LoginPage = () => {
 
     toast.success("Successfully logged in!");
     router.push('/');
+    router.refresh();
   };
 
   const handleGoogleLogin = async () => {

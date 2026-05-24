@@ -1,14 +1,29 @@
+
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Image from "next/image";
 
-export const singleIdeas = async (id) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideas/${id}`);
+export const singleIdeas = async (id, token) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideas/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}` || ""
+    }
+  });
   const data = await res.json();
   return data || {};
 };
 
 const IdeaDetailsPage = async ({ params }) => {
   const { id } = await params;
-  const idea = await singleIdeas(id);
+
+  const tokenData = await auth.api.getToken({
+    headers: await headers()
+  });
+
+  const token = tokenData?.token || tokenData;
+  console.log("Extracted Token:", token);
+
+  const idea = await singleIdeas(id, token);
 
   const {
     ideaTitle,
@@ -58,7 +73,7 @@ const IdeaDetailsPage = async ({ params }) => {
               </p>
             </div>
 
-            
+
             <div className="space-y-6 pt-6 border-t border-slate-100">
               {/* Problem Statement */}
               <div className="space-y-2">
@@ -91,15 +106,15 @@ const IdeaDetailsPage = async ({ params }) => {
                 <h2 className="text-xs font-black uppercase tracking-wider text-slate-400 mr-2">Tags:</h2>
                 {typeof tags === "string"
                   ? tags.split(",").map((tag, index) => tag.trim() && (
-                      <span key={index} className="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200/70 border border-slate-200/60 px-3 py-1 rounded-lg font-medium transition-colors">
-                        #{tag.trim()}
-                      </span>
-                    ))
+                    <span key={index} className="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200/70 border border-slate-200/60 px-3 py-1 rounded-lg font-medium transition-colors">
+                      #{tag.trim()}
+                    </span>
+                  ))
                   : Array.isArray(tags) && tags.map((tag, index) => (
-                      <span key={index} className="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200/70 border border-slate-200/60 px-3 py-1 rounded-lg font-medium transition-colors">
-                        #{tag.trim()}
-                      </span>
-                    ))
+                    <span key={index} className="text-xs text-slate-600 bg-slate-100 hover:bg-slate-200/70 border border-slate-200/60 px-3 py-1 rounded-lg font-medium transition-colors">
+                      #{tag.trim()}
+                    </span>
+                  ))
                 }
               </div>
             )}

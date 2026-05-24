@@ -9,9 +9,10 @@ import { MdOutlineLightMode } from "react-icons/md";
 
 const Navbar = () => {
   const pathName = usePathname();
+  const router = useRouter();
 
-  const userData = authClient.useSession();
-  const user = userData.data?.user;
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
 
   const navLinkStyles = <>
     <li className={`font-bold transition-all duration-300 ${pathName === '/' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-500'}`}>
@@ -37,14 +38,14 @@ const Navbar = () => {
 
   const handleLogOut = async () => {
     await authClient.signOut();
-    window.location.href = "/";
+    router.push('/login')
   }
 
   return (
-   
+
     <div className="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-[0_2px_20px_rgba(0,0,0,0.03)]">
       <div className="navbar w-11/12 mx-auto h-16">
-        
+
         {/* Navbar Start Section */}
         <div className="navbar-start gap-2 md:gap-0">
           <div className="dropdown">
@@ -57,7 +58,7 @@ const Navbar = () => {
               {navLinkStyles}
             </ul>
           </div>
-          
+
           {/* Logo */}
           <Link href={'/'} className="flex items-center space-x-2 font-black text-xl md:text-2xl tracking-tight text-slate-900 group">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
@@ -125,8 +126,8 @@ const Navbar = () => {
                     </button>
                   </Link>
 
-                  <button 
-                    onClick={handleLogOut} 
+                  <button
+                    onClick={handleLogOut}
                     className="w-full py-2 px-3 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-center"
                   >
                     Log Out
