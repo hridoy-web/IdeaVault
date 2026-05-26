@@ -6,6 +6,7 @@ import { FaPen, FaTrash, FaFolderOpen, FaLightbulb } from "react-icons/fa6";
 import { authClient } from "@/lib/auth-client";
 import { fetchMyIdeas, updateIdea, deleteIdea } from "@/lib/ideas/data";
 import Link from "next/link";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 const MyIdeasPage = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -123,9 +124,7 @@ const MyIdeasPage = () => {
 
         {/* Loading spinner text*/}
         {loading && (
-          <div className="text-center py-10 text-slate-500">
-            Loading ideas...
-          </div>
+          <LoadingSpinner/>
         )}
 
         {/* empty box - for no data */}

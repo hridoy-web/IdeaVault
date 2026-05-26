@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaArrowRight, FaRegCommentDots, FaClock } from "react-icons/fa6";
 import { fetchMyInteractions } from "@/lib/ideas/data";
 import { authClient } from "@/lib/auth-client";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 const MyInteractionsPage = () => {
   const [interactions, setInteractions] = useState([]);
@@ -28,8 +29,7 @@ const MyInteractionsPage = () => {
     }
   }, [session]);
 
-  if (loading) return <div className="text-center py-20 text-slate-500 animate-pulse">Loading interactions...</div>;
-
+  if (loading) return <LoadingSpinner/>
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
