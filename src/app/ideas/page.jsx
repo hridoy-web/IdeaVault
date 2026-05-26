@@ -3,22 +3,8 @@ import Card from "@/components/UI/Card";
 import { fetchIdeas } from "@/lib/ideas/data";
 
 const AllIdeasPage = async () => {
-
     const ideas = await fetchIdeas();
-    // console.log(ideas);
-
-    // // Search and Filter 
-    // const [searchQuery, setSearchQuery] = useState("");
-    // const [selectedCategory, setSelectedCategory] = useState("All");
-
-    // //  filtering logic
-    // const filteredIdeas = allIdeas.filter((idea) => {
-    //     const matchesSearch = idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //         idea.problem.toLowerCase().includes(searchQuery.toLowerCase());
-    //     const matchesCategory = selectedCategory === "All" || idea.category === selectedCategory;
-    //     return matchesSearch && matchesCategory;
-    // });
-
+   
     return (
         <div className="w-full bg-slate-50 min-h-screen py-12 text-slate-800">
             <div className="w-11/12 max-w-7xl mx-auto space-y-10">

@@ -1,22 +1,25 @@
 "use client";
 
 import { createIdea } from "@/lib/ideas/data";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const AddIdeaPage = () => {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
 
   const handleAddIdea = async (e) => {
     e.preventDefault();
     
-    // Form data collection 
     const formData = new FormData(e.target);
     const ideaData = Object.fromEntries(formData.entries());
-    
-    // backend data 
+
+    ideaData.userEmail = session?.user?.email;
+    ideaData.userName = session?.user?.name;
+
     const result = await createIdea(ideaData);
-    if(result){
+    if (result) {
       toast.success("Your idea added successfully!");
       e.target.reset();
       router.push('/ideas');

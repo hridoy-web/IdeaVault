@@ -1,14 +1,14 @@
 
-import HomePage from "@/components/Home/HeroBanner";
+import HeroBanner from "@/components/Home/HeroBanner";
 import HowItWorks from "@/components/Home/HowItWorks";
 import TopContributors from "@/components/Home/TopContributors";
 import TrendingIdeas from "@/components/Home/TrendingIdeas";
 
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div>
-      <HomePage />
+      <HeroBanner />
       <TrendingIdeas/>
       <TopContributors/>
       <HowItWorks />
@@ -16,4 +16,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

@@ -1,244 +1,357 @@
 "use client";
 
-import { useState } from "react";
-import { FaPen, FaTrash, FaTriangleExclamation } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { FaPen, FaTrash, FaFolderOpen, FaLightbulb } from "react-icons/fa6";
+import { authClient } from "@/lib/auth-client";
+import { fetchMyIdeas, updateIdea, deleteIdea } from "@/lib/ideas/data";
+import Link from "next/link";
 
 const MyIdeasPage = () => {
-  // 1. Mock data representing ideas created by the logged-in user
-  const [myIdeas, setMyIdeas] = useState([
-    {
-      _id: "1",
-      title: "AI Crop Disease Detector",
-      category: "Artificial Intelligence",
-      budget: "$5,000",
-      audience: "Local Farmers",
-      shortDesc: "A smart mobile application helping local farmers detect crop infections instantly.",
-    },
-    {
-      _id: "2",
-      title: "Micro-Investing App for Students",
-      category: "FinTech",
-      budget: "$3,500",
-      audience: "College Students",
-      shortDesc: "An automated investment platform designed tailored for student budgets.",
-    },
-  ]);
+  const { data: session, isPending } = authClient.useSession();
 
-  // States for handling Modals
+  const [myIdeas, setMyIdeas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [selectedIdea, setSelectedIdea] = useState(null);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
 
-  // Trigger Update Modal
-  const openUpdateModal = (idea) => {
-    setSelectedIdea({ ...idea });
-    setIsUpdateOpen(true);
-  };
+  // data fetch
+  useEffect(() => {
+    if (isPending) return;
 
-  // Trigger Delete Modal
-  const openDeleteModal = (idea) => {
-    setSelectedIdea(idea);
-    setIsDeleteOpen(true);
-  };
+    const load = async () => {
+      try {
+        if (!session?.user?.email) return setLoading(false);
 
-  // Save Update Function
-  const handleSaveUpdate = (e) => {
+        const data = await fetchMyIdeas(session.user.email);
+        setMyIdeas(Array.isArray(data) ? data : []);
+      } catch (err) {
+        toast.error("Failed to load ideas");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [session, isPending]);
+
+  //  data update
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setMyIdeas(myIdeas.map(item => item._id === selectedIdea._id ? selectedIdea : item));
-    setIsUpdateOpen(false);
-    setSelectedIdea(null);
+    if (!selectedIdea?._id) return;
+
+    try {
+      setActionLoading(true);
+
+      const payload = {
+        ideaTitle: selectedIdea.ideaTitle,
+        category: selectedIdea.category,
+        estimatedBudget: selectedIdea.estimatedBudget,
+        shortDescription: selectedIdea.shortDescription,
+        targetAudience: selectedIdea.targetAudience,
+      };
+
+      const res = await updateIdea(selectedIdea._id, payload);
+
+      if (!res || res.error) {
+        toast.error("Update failed");
+        return;
+      }
+
+      const updated = res?.data || {
+        ...selectedIdea,
+        ...payload,
+      };
+
+      setMyIdeas((prev) =>
+        prev.map((item) =>
+          item._id === selectedIdea._id ? updated : item
+        )
+      );
+
+      toast.success("Idea updated successfully");
+
+      setIsUpdateOpen(false);
+      setSelectedIdea(null);
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  // Delete Function
-  const handleDeleteConfirm = () => {
-    setMyIdeas(myIdeas.filter(item => item._id !== selectedIdea._id));
-    setIsDeleteOpen(false);
-    setSelectedIdea(null);
+  // data delete
+  const handleDelete = async () => {
+    if (!selectedIdea?._id) return;
+
+    try {
+      setActionLoading(true);
+
+      const res = await deleteIdea(selectedIdea._id);
+
+      if (res?.error) {
+        toast.error("Delete failed");
+        return;
+      }
+
+      setMyIdeas((prev) =>
+        prev.filter((item) => item._id !== selectedIdea._id)
+      );
+
+      toast.success("Idea deleted successfully");
+
+      setIsDeleteOpen(false);
+      setSelectedIdea(null);
+    } catch (err) {
+      toast.error("Delete failed");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   return (
-    <div className="w-full bg-slate-50 min-h-screen py-12 text-slate-800">
-      <div className="w-11/12 max-w-6xl mx-auto space-y-8">
-        
-        {/* Page Header */}
-        <div className="border-b border-slate-200 pb-5 space-y-2">
-          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">
-            My Submitted Ideas
-          </h1>
-          <p className="text-slate-500 text-sm">
-            Manage, update, or analyze the performance and feedback of your posted startup concepts.
-          </p>
-        </div>
+    <div className="min-h-screen bg-slate-50 py-10">
+      <div className="max-w-6xl mx-auto px-4">
 
-        {/* Ideas Table Container */}
-        {myIdeas.length > 0 ? (
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="table w-full text-slate-700">
 
-                {/* Table Head */}
-                <thead className="bg-slate-50 text-slate-500 font-bold text-xs uppercase tracking-wider border-b border-slate-200">
+        <h1 className="text-3xl font-bold mb-6 text-slate-900">
+          My Ideas
+        </h1>
+
+        {/* Loading spinner text*/}
+        {loading && (
+          <div className="text-center py-10 text-slate-500">
+            Loading ideas...
+          </div>
+        )}
+
+        {/* empty box - for no data */}
+        {!loading && myIdeas.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow p-12 text-center flex flex-col items-center">
+
+            <div className="text-slate-300 text-5xl mb-4">
+              <FaFolderOpen />
+            </div>
+
+            <h2 className="text-xl font-bold text-slate-800">
+              No Ideas Found
+            </h2>
+
+            <p className="text-slate-500 mt-2 text-sm max-w-md">
+              You are not added any startup ideas yet. Start building your first idea and share it with the world.
+            </p>
+
+            <Link href={"/add-idea"}
+              className="mt-6 flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              <FaLightbulb />
+              Add New Idea
+            </Link>
+
+          </div>
+        ) : (
+          !loading && (
+            <div className="bg-white rounded-2xl shadow overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-slate-100 text-left">
                   <tr>
-                    <th className="p-4 pl-6">Idea Concept</th>
-                    <th className="p-4">Category</th>
-                    <th className="p-4">Est. Budget</th>
-                    <th className="p-4 text-right pr-6">Actions</th>
+                    <th className="p-3">Title</th>
+                    <th>Category</th>
+                    <th>Budget</th>
+                    <th className="text-right p-3">Actions</th>
                   </tr>
                 </thead>
-                
-                {/* Table Body */}
-                <tbody className="divide-y divide-slate-100">
+
+                <tbody>
                   {myIdeas.map((idea) => (
-                    <tr key={idea._id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="p-4 pl-6 max-w-xs md:max-w-md">
-                        <div className="space-y-1">
-                          <span className="font-bold text-slate-900 text-sm block truncate">{idea.title}</span>
-                          <span className="text-xs text-slate-400 block truncate font-medium">{idea.shortDesc}</span>
-                        </div>
+                    <tr key={idea._id} className="border-t">
+                      <td className="p-3">
+                        <p className="font-semibold">{idea.ideaTitle}</p>
+                        <p className="text-xs text-slate-500">
+                          {idea.shortDescription}
+                        </p>
                       </td>
-                      <td className="p-4">
-                        <span className="inline-block bg-blue-50 border border-blue-100 text-[#006eff] px-2.5 py-0.5 rounded-md text-xs font-bold">
-                          {idea.category}
-                        </span>
+
+                      <td className="p-3">{idea.category}</td>
+                      <td className="p-3">
+                        {idea.estimatedBudget || "N/A"}
                       </td>
-                      <td className="p-4 font-bold text-sm text-slate-800">{idea.budget}</td>
-                      <td className="p-4 text-right pr-6">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button 
-                            type="button"
-                            onClick={() => openUpdateModal(idea)}
-                            className="btn btn-square btn-sm bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-[#006eff] border-none rounded-lg transition-colors"
-                          >
-                            <FaPen size={12} />
-                          </button>
-                          <button 
-                            type="button"
-                            onClick={() => openDeleteModal(idea)}
-                            className="btn btn-square btn-sm bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-500 border-none rounded-lg transition-colors"
-                          >
-                            <FaTrash size={12} />
-                          </button>
-                        </div>
+
+                      <td className="p-3 flex justify-end gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedIdea({ ...idea });
+                            setIsUpdateOpen(true);
+                          }}
+                          className="p-2 bg-blue-100 rounded"
+                        >
+                          <FaPen />
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setSelectedIdea(idea);
+                            setIsDeleteOpen(true);
+                          }}
+                          className="p-2 bg-red-100 rounded"
+                        >
+                          <FaTrash />
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
-        ) : (
-          /* Empty text */
-          <div className="text-center py-20 bg-white border border-slate-200 rounded-3xl space-y-3">
-            <span className="text-4xl">💡</span>
-            <h3 className="text-lg font-bold text-slate-900">No Concepts Vaulted Yet</h3>
-            <p className="text-slate-400 text-sm max-w-xs mx-auto">
-              You are not submitted any startup ideas yet. Start sharing your vision today!
-            </p>
-          </div>
+          )
         )}
 
-        {/*update modal*/}
+        {/* update modal */}
         {isUpdateOpen && selectedIdea && (
-          <div className="modal modal-open bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="modal-box bg-white border border-slate-200 rounded-3xl max-w-xl p-6 md:p-8 text-slate-800 shadow-xl relative">
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 pb-3">
-                Update Concept Specifications
-              </h3>
-              
-              <form onSubmit={handleSaveUpdate} className="space-y-4 pt-4">
-                <div className="form-control w-full space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Idea Title</label>
-                  <input 
-                    type="text" 
-                    value={selectedIdea.title} 
-                    onChange={(e) => setSelectedIdea({ ...selectedIdea, title: e.target.value })}
-                    required
-                    className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] text-sm rounded-xl"
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white w-[95%] max-w-xl p-6 rounded-2xl shadow-xl">
+
+              <h2 className="text-xl font-bold mb-6 text-slate-800">
+                Update Idea
+              </h2>
+
+              <form onSubmit={handleUpdate} className="space-y-4">
+
+                {/* Title */}
+                <div>
+                  <label className="text-sm font-medium text-slate-600">
+                    Idea Title
+                  </label>
+                  <input
+                    name="ideaTitle"
+                    className="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={selectedIdea.ideaTitle}
+                    onChange={(e) =>
+                      setSelectedIdea({
+                        ...selectedIdea,
+                        ideaTitle: e.target.value,
+                      })
+                    }
+                    placeholder="Enter idea title"
                   />
                 </div>
 
-                <div className="form-control w-full space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Short Description</label>
-                  <input 
-                    type="text" 
-                    value={selectedIdea.shortDesc} 
-                    onChange={(e) => setSelectedIdea({ ...selectedIdea, shortDesc: e.target.value })}
-                    required
-                    className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] text-sm rounded-xl"
+                {/* Category */}
+                <div>
+                  <label className="text-sm font-medium text-slate-600">
+                    Category
+                  </label>
+                  <input
+                    name="category"
+                    className="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={selectedIdea.category}
+                    onChange={(e) =>
+                      setSelectedIdea({
+                        ...selectedIdea,
+                        category: e.target.value,
+                      })
+                    }
+                    placeholder="Enter category"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="form-control w-full space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Budget</label>
-                    <input 
-                      type="text" 
-                      value={selectedIdea.budget} 
-                      onChange={(e) => setSelectedIdea({ ...selectedIdea, budget: e.target.value })}
-                      className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] text-sm rounded-xl"
-                    />
-                  </div>
-                  <div className="form-control w-full space-y-1">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Target Audience</label>
-                    <input 
-                      type="text" 
-                      value={selectedIdea.audience} 
-                      onChange={(e) => setSelectedIdea({ ...selectedIdea, audience: e.target.value })}
-                      required
-                      className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] text-sm rounded-xl"
-                    />
-                  </div>
+                {/* Budget */}
+                <div>
+                  <label className="text-sm font-medium text-slate-600">
+                    Estimated Budget
+                  </label>
+                  <input
+                    name="estimatedBudget"
+                    className="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={selectedIdea.estimatedBudget}
+                    onChange={(e) =>
+                      setSelectedIdea({
+                        ...selectedIdea,
+                        estimatedBudget: e.target.value,
+                      })
+                    }
+                    placeholder="e.g. $5000"
+                  />
                 </div>
 
-                <div className="modal-action pt-4 border-t border-slate-100 flex justify-end space-x-3">
-                  <button 
-                    type="button" 
-                    onClick={() => { setIsUpdateOpen(false); setSelectedIdea(null); }}
-                    className="btn btn-ghost text-slate-500 font-bold text-xs uppercase tracking-wider rounded-xl px-5"
+                {/* Description */}
+                <div>
+                  <label className="text-sm font-medium text-slate-600">
+                    Short Description
+                  </label>
+                  <textarea
+                    name="shortDescription"
+                    rows={4}
+                    className="w-full mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={selectedIdea.shortDescription}
+                    onChange={(e) =>
+                      setSelectedIdea({
+                        ...selectedIdea,
+                        shortDescription: e.target.value,
+                      })
+                    }
+                    placeholder="Write short description..."
+                  />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsUpdateOpen(false)}
+                    className="px-5 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
                   >
                     Cancel
                   </button>
-                  <button 
-                    type="submit" 
-                    className="btn bg-linear-to-r from-[#006eff] to-indigo-600 hover:from-[#005fd8] hover:to-indigo-700 text-white border-none font-bold text-xs uppercase tracking-wider rounded-xl px-6 h-auto min-h-0 py-3"
+
+                  <button
+                    disabled={actionLoading}
+                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                   >
-                    Save Modifications
+                    {actionLoading ? "Updating..." : "Update Idea"}
                   </button>
                 </div>
+
               </form>
             </div>
           </div>
         )}
 
-        {/* delete confirmation modal */}
+        {/* delete modal*/}
         {isDeleteOpen && selectedIdea && (
-          <div className="modal modal-open bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="modal-box bg-white border border-slate-200 rounded-2xl max-w-sm p-6 text-center space-y-4 shadow-xl">
-              <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto">
-                <FaTriangleExclamation size={24} className="text-red-500 animate-bounce" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-base font-black text-slate-900">Confirm Concept Deletion</h3>
-                <p className="text-slate-400 text-xs leading-relaxed font-medium">
-                  Are you absolutely sure you want to delete <span className="font-bold text-slate-700">{selectedIdea.title}</span>? This action is permanent.
-                </p>
-              </div>
-              <div className="flex space-x-3 pt-2">
-                <button 
-                  type="button"
-                  onClick={() => { setIsDeleteOpen(false); setSelectedIdea(null); }}
-                  className="btn btn-ghost text-slate-500 font-bold text-xs uppercase tracking-wider rounded-xl w-1/2"
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl w-[350px] text-center">
+
+              <h2 className="text-lg font-bold text-red-600">
+                Delete Idea?
+              </h2>
+
+              <p className="text-sm mt-2">
+                {selectedIdea.ideaTitle}
+              </p>
+
+              <div className="flex gap-3 mt-5">
+
+                <button
+                  onClick={() => setIsDeleteOpen(false)}
+                  className="w-1/2 bg-gray-200 py-2 rounded"
                 >
-                  No, Keep it
+                  Cancel
                 </button>
-                <button 
-                  type="button"
-                  onClick={handleDeleteConfirm}
-                  className="btn bg-red-600 hover:bg-red-700 text-white border-none font-bold text-xs uppercase tracking-wider rounded-xl w-1/2"
+
+                <button
+                  onClick={handleDelete}
+                  disabled={actionLoading}
+                  className="w-1/2 bg-red-600 text-white py-2 rounded"
                 >
-                  Yes, Delete
+                  {actionLoading ? "Deleting..." : "Delete"}
                 </button>
+
               </div>
+
             </div>
           </div>
         )}
