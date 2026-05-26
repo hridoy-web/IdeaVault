@@ -177,7 +177,7 @@ const MyIdeasPage = () => {
 
                       <td className="p-3">{idea.category}</td>
                       <td className="p-3">
-                        {idea.estimatedBudget || "N/A"}
+                        ${idea.estimatedBudget || "N/A"}
                       </td>
 
                       <td className="p-3 flex justify-end gap-2">

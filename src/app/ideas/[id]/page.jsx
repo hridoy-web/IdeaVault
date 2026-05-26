@@ -1,4 +1,5 @@
 
+import CommentsSection from "@/components/UI/CommentsSection";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -20,8 +21,12 @@ const IdeaDetailsPage = async ({ params }) => {
     headers: await headers()
   });
 
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
   const token = tokenData?.token || tokenData;
-  console.log("Extracted Token:", token);
+  // console.log("Extracted Token:", token);
 
   const idea = await singleIdeas(id, token);
 
@@ -120,21 +125,26 @@ const IdeaDetailsPage = async ({ params }) => {
             )}
 
           </div>
-
-          {/* Comment section  */}
-
         </div>
 
         {/* Right Side Column */}
         <div className="space-y-8">
+
+          {/* Ecosystem Specs */}
           <div className="bg-white border border-slate-200/80 p-6 rounded-3xl shadow-xs space-y-5">
+
             <h3 className="text-sm font-black uppercase tracking-wider text-slate-900 border-b border-slate-100 pb-3">
               Ecosystem Specs
             </h3>
 
             <div className="space-y-4">
+
+              {/* Budget */}
               <div className="bg-slate-50/60 p-3.5 rounded-2xl border border-slate-100">
-                <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block mb-0.5">Est. Budget</span>
+                <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block mb-0.5">
+                  Est. Budget
+                </span>
+
                 <span className="text-base font-black text-slate-900">
                   {estimatedBudget ? `$${estimatedBudget}` : "Not Specified"}
                 </span>
@@ -142,11 +152,24 @@ const IdeaDetailsPage = async ({ params }) => {
 
               {/* Target Audience */}
               <div className="bg-slate-50/60 p-3.5 rounded-2xl border border-slate-100">
-                <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block mb-0.5">Target Audience</span>
-                <span className="text-sm font-bold text-slate-700">{targetAudience || "Not Specified"}</span>
+                <span className="text-[10px] uppercase tracking-wider font-black text-slate-400 block mb-0.5">
+                  Target Audience
+                </span>
+
+                <span className="text-sm font-bold text-slate-700">
+                  {targetAudience || "Not Specified"}
+                </span>
               </div>
+
             </div>
           </div>
+
+         {/* COMMENTS */}
+          <CommentsSection
+            ideaId={id}
+            session={session}
+          />
+
         </div>
 
       </div>
