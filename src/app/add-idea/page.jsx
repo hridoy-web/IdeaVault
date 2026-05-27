@@ -76,10 +76,11 @@ const AddIdeaPage = () => {
                 <option value="" disabled>Select</option>
                 <option value="Technology">Technology</option>
                 <option value="Healthcare">Healthcare</option>
-                <option value="Artificial Intelligence">AI</option>
+                <option value="AI">AI</option>
                 <option value="Education">Education</option>
                 <option value="FinTech">FinTech</option>
                 <option value="Sustainability">Sustainability</option>
+                 <option value="Others">Others</option>
               </select>
             </div>
 
