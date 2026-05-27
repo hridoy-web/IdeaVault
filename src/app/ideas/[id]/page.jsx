@@ -2,6 +2,7 @@ import CommentsSection from "@/components/UI/CommentsSection";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export const singleIdeas = async (id, token) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ideas/${id}`, {
@@ -16,17 +17,18 @@ export const singleIdeas = async (id, token) => {
 
 const IdeaDetailsPage = async ({ params }) => {
   const { id } = await params;
-
   const tokenData = await auth.api.getToken({
     headers: await headers(),
   });
-
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const token = tokenData?.token || tokenData;
+  if (!session?.user) {
+  redirect("/login");
+}
 
+  const token = tokenData?.token || tokenData;
   const idea = await singleIdeas(id, token);
 
   const {
@@ -203,7 +205,7 @@ const IdeaDetailsPage = async ({ params }) => {
 
           {/* Comments */}
           <CommentsSection ideaId={id} session={session} />
-          
+
         </div>
       </div>
     </div>
