@@ -1,4 +1,4 @@
-import {Inter, Geist_Mono} from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "IdeaVault – Startup Idea Sharing Platform",
-  description: "A web-based platform where users can share innovative startup ideas, explore ideas posted by others, and engage through comments and discussions.",
+  description:
+    "A web-based platform where users can share innovative startup ideas, explore ideas posted by others, and engage through comments and discussions.",
 };
 
 export default function RootLayout({ children }) {
@@ -24,18 +25,18 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${interFont.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans">
-        
-        <Navbar/>
+      <body className="min-h-full bg-white dark:bg-slate-950 transition-colors">
+        <Navbar />
 
-       <main className="grow">
-         {children}
-       </main>
-        
-        <Footer/>
+        <main className="grow">
+          {children}
+        </main>
+
+        <Footer />
         <Toaster />
-        </body>
+      </body>
     </html>
   );
 }

@@ -15,12 +15,9 @@ const LoginPage = () => {
     const formData = new FormData(e.currentTarget);
     const loginData = Object.fromEntries(formData.entries());
 
-    const { data, error } = await signIn.email({
-      ...loginData
+    const { error } = await signIn.email({
+      ...loginData,
     });
-
-    // const { data: tokenData } = await authClient.token();
-    // console.log(tokenData);
 
     if (error) {
       toast.error(error.message);
@@ -28,7 +25,7 @@ const LoginPage = () => {
     }
 
     toast.success("Successfully logged in!");
-    router.push('/');
+    router.push("/");
     router.refresh();
   };
 
@@ -44,49 +41,69 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full bg-slate-50 min-h-screen flex items-center justify-center py-12 text-slate-800">
-      <div className="w-11/12 max-w-md bg-white border border-slate-200 p-6 md:p-10 rounded-3xl shadow-sm space-y-6">
+    <div className="w-full min-h-screen flex items-center justify-center py-12 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
-        {/* Header */}
+      <div className="w-11/12 max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-10 rounded-3xl shadow-sm space-y-6 transition-colors duration-300">
+
         <div className="text-center space-y-1.5">
-          <h2 className="text-2xl font-black tracking-tight text-slate-900">Welcome Back</h2>
-          <p className="text-slate-400 text-xs uppercase tracking-wider font-bold">Log in to your IdeaVault account</p>
+          <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+            Welcome Back
+          </h2>
+
+          <p className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-bold">
+            Log in to your IdeaVault account
+          </p>
         </div>
 
-        {/* Google Login Button */}
+        {/* Google Login */}
         <button
           onClick={handleGoogleLogin}
           type="button"
-          className="btn w-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold rounded-xl flex items-center justify-center gap-2 normal-case h-auto py-3 min-h-0 text-sm shadow-xs transition-all"
+          className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
         >
           <FcGoogle size={20} />
-          <span>Continue with Google</span>
+          Continue with Google
         </button>
 
         {/* Divider */}
-        <div className="flex items-center my-4 before:flex-1 before:border-t before:border-slate-200 after:flex-1 after:border-t after:border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-widest px-2">
-          <span className="mx-3">Or email</span>
+        <div className="flex items-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+          <div className="flex-1 border-t border-slate-200 dark:border-slate-700" />
+          <span className="px-3">Or email</span>
+          <div className="flex-1 border-t border-slate-200 dark:border-slate-700" />
         </div>
 
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
-          <div className="form-control w-full space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Email Address</label>
+
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Email Address
+            </label>
+
             <input
               type="email"
               name="email"
               required
               placeholder="name@gmail.com"
-              className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#006eff] outline-none text-sm"
             />
           </div>
 
-          <div className="form-control w-full space-y-1.5">
-            <div className="flex justify-between items-center">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Password</label>
+          {/* Password */}
+          <div className="space-y-1.5">
 
-              {/* Forget Password (UI) */}
-              <button type="button" className="text-xs font-bold text-[#006eff] hover:underline">Forgot Password?</button>
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Password
+              </label>
+
+              <button
+                type="button"
+                className="text-xs font-bold text-[#006eff] hover:underline"
+              >
+                Forgot Password?
+              </button>
             </div>
 
             <input
@@ -94,22 +111,27 @@ const LoginPage = () => {
               name="password"
               required
               placeholder="••••••••"
-              className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#006eff] outline-none text-sm"
             />
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
-            className="btn bg-linear-to-r from-[#006eff] to-indigo-600 hover:from-[#005fd8] hover:to-indigo-700 text-white border-none w-full font-bold text-xs uppercase tracking-wider rounded-xl py-3.5 h-auto min-h-0 mt-2 transition-all shadow-md shadow-blue-500/10"
+            className="w-full bg-linear-to-r from-[#006eff] to-indigo-600 hover:from-[#005fd8] hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl py-3.5 transition-all shadow-md"
           >
             Sign In
           </button>
+
         </form>
 
-        {/* Redirect Link */}
-        <p className="text-center text-sm text-slate-500 font-medium">
+        {/* Redirect */}
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400 font-medium">
           New to IdeaVault?{" "}
-          <Link href="/register" className="text-[#006eff] font-bold hover:underline">
+          <Link
+            href="/register"
+            className="text-[#006eff] font-bold hover:underline"
+          >
             Create an account
           </Link>
         </p>

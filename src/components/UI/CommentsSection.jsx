@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
 import {
   FaPaperPlane,
   FaPen,
@@ -17,6 +18,7 @@ import {
   updateComment,
   deleteComment,
 } from "@/lib/ideas/data";
+import LoadingSpinner from "./LoadingSpinner";
 
 const CommentsSection = ({ ideaId, session }) => {
   const [comments, setComments] = useState([]);
@@ -26,7 +28,7 @@ const CommentsSection = ({ ideaId, session }) => {
   const [editId, setEditId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  // fetch comments
+  // Fetch comments
   useEffect(() => {
     const loadComments = async () => {
       try {
@@ -49,7 +51,7 @@ const CommentsSection = ({ ideaId, session }) => {
     }
   }, [ideaId]);
 
- // add comment
+  // Add comment
   const handleAddComment = async () => {
     if (!commentText.trim()) {
       return toast.error("Write something first");
@@ -86,7 +88,7 @@ const CommentsSection = ({ ideaId, session }) => {
     }
   };
 
-// delete comment
+  // Delete comment
   const handleDelete = async (id) => {
     try {
       const res = await deleteComment(id);
@@ -105,13 +107,13 @@ const CommentsSection = ({ ideaId, session }) => {
     }
   };
 
-// edit comment
+  // Edit comment
   const handleEditStart = (comment) => {
     setEditId(comment._id);
     setEditText(comment.text);
   };
 
- // edit save
+  // Save edit
   const handleSaveEdit = async (id) => {
     if (!editText.trim()) {
       return toast.error("Comment cannot be empty");
@@ -151,48 +153,49 @@ const CommentsSection = ({ ideaId, session }) => {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl p-4 md:p-5 space-y-5 sticky top-24">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 md:p-5 space-y-5 sticky top-24 transition-colors duration-300">
 
-      <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
+      <div className="flex items-start justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+
         <div>
-          <h2 className="text-lg md:text-xl font-black text-slate-900">
+          <h2 className="text-lg md:text-xl font-black text-slate-900 dark:text-white">
             Discussion & Feedback
           </h2>
 
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
             Share thoughts and suggestions
           </p>
         </div>
 
-        <div className="bg-blue-50 border border-blue-100 text-[#006eff] text-[11px] font-bold px-3 py-1.5 rounded-xl min-w-[75px] text-center">
+        <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-[#006eff] text-[11px] font-bold px-3 py-1.5 rounded-xl min-w-[75px] text-center">
           {comments.length} Comments
         </div>
       </div>
 
-      {/* comment box */}
+      {/* Comment Box */}
       <div className="space-y-4">
 
         <div className="flex gap-3">
 
-          {/* icon */}
-          <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 shrink-0">
+          {/* User Icon */}
+          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0">
             <FaRegCircleUser size={15} />
           </div>
 
-          {/* text input */}
+          {/* Text */}
           <div className="flex-1">
+
             <textarea
               rows={4}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Write your feedback..."
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 resize-none outline-none focus:border-[#006eff] focus:ring-4 focus:ring-blue-100 transition"
+              className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none outline-none focus:border-[#006eff] focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-500/10 transition"
             />
           </div>
-
         </div>
 
-        {/* btn */}
+        {/* Button */}
         <button
           onClick={handleAddComment}
           className="w-full flex items-center justify-center gap-2 bg-[#006eff] hover:bg-[#0057d1] text-white text-sm font-bold py-3 rounded-2xl transition"
@@ -200,39 +203,35 @@ const CommentsSection = ({ ideaId, session }) => {
           <FaPaperPlane size={12} />
           Post Comment
         </button>
-
       </div>
 
-      {/* comments */}
+      {/* Comments */}
       <div className="space-y-4">
 
-        {/* loading text*/}
+        {/* Loading */}
         {loading && (
-          <div className="text-center py-8 text-sm text-slate-400">
-            Loading comments...
-          </div>
+          <LoadingSpinner/>
         )}
 
-        {/* empty message */}
+        {/* Empty message */}
         {!loading && comments.length === 0 && (
-          <div className="border border-dashed border-slate-200 rounded-3xl py-10 px-4 bg-slate-50 text-center flex flex-col items-center">
+          <div className="border border-dashed border-slate-200 dark:border-slate-700 rounded-3xl py-10 px-4 bg-slate-50 dark:bg-slate-950 text-center flex flex-col items-center">
 
-            <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+            <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-4">
               <FaRegCircleUser size={20} />
             </div>
 
-            <h3 className="text-base font-black text-slate-700">
+            <h3 className="text-base font-black text-slate-700 dark:text-white">
               No Comments Yet
             </h3>
 
-            <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-[220px] leading-relaxed">
+            <p className="text-xs md:text-sm text-slate-400 dark:text-slate-500 mt-1 max-w-[220px] leading-relaxed">
               Be the first person to share feedback.
             </p>
-
           </div>
         )}
 
-        {/* comment card */}
+        {/* Comment Card */}
         {comments.map((comment) => {
           const isOwner =
             session?.user?.email === comment?.userEmail;
@@ -240,33 +239,34 @@ const CommentsSection = ({ ideaId, session }) => {
           return (
             <div
               key={comment._id}
-              className="border border-slate-200 rounded-3xl p-4 hover:shadow-sm transition"
+              className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-3xl p-4 hover:shadow-sm dark:hover:bg-slate-900 transition"
             >
 
               <div className="flex items-start justify-between gap-3">
 
-                {/*  */}
+                {/* Left */}
                 <div className="flex gap-3 flex-1 min-w-0">
 
-                  {/* user icon */}
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#006eff] flex items-center justify-center shrink-0">
+                  {/* Avatar */}
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-[#006eff] flex items-center justify-center shrink-0">
                     <FaRegCircleUser size={15} />
                   </div>
 
-                  {/* content */}
+                  {/* Content */}
                   <div className="flex-1 min-w-0 space-y-2">
 
                     <div className="flex flex-wrap items-center gap-2">
-                      <h4 className="font-black text-sm text-slate-800">
+
+                      <h4 className="font-black text-sm text-slate-800 dark:text-white">
                         {comment.userName}
                       </h4>
 
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500">
                         Comment
                       </span>
                     </div>
 
-                    {/* edit */}
+                    {/* Edit */}
                     {editId === comment._id ? (
                       <div className="space-y-3">
 
@@ -276,7 +276,7 @@ const CommentsSection = ({ ideaId, session }) => {
                           onChange={(e) =>
                             setEditText(e.target.value)
                           }
-                          className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 resize-none outline-none focus:border-[#006eff] focus:ring-4 focus:ring-blue-100 transition"
+                          className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 text-sm text-slate-700 dark:text-slate-200 resize-none outline-none focus:border-[#006eff] focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-500/10 transition"
                         />
 
                         <div className="flex items-center gap-2">
@@ -285,7 +285,7 @@ const CommentsSection = ({ ideaId, session }) => {
                             onClick={() =>
                               handleSaveEdit(comment._id)
                             }
-                            className="w-9 h-9 rounded-xl bg-green-100 hover:bg-green-200 text-green-600 flex items-center justify-center transition"
+                            className="w-9 h-9 rounded-xl bg-green-100 dark:bg-green-500/10 hover:bg-green-200 dark:hover:bg-green-500/20 text-green-600 flex items-center justify-center transition"
                           >
                             <FaCheck size={12} />
                           </button>
@@ -295,31 +295,26 @@ const CommentsSection = ({ ideaId, session }) => {
                               setEditId(null);
                               setEditText("");
                             }}
-                            className="w-9 h-9 rounded-xl bg-red-100 hover:bg-red-200 text-red-500 flex items-center justify-center transition"
+                            className="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-500 flex items-center justify-center transition"
                           >
                             <FaXmark size={12} />
                           </button>
-
                         </div>
-
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-600 leading-relaxed break-words">
+                      <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed break-words">
                         {comment.text}
                       </p>
                     )}
-
                   </div>
-
                 </div>
 
-                {/* action btn */}
                 {isOwner && editId !== comment._id && (
                   <div className="flex items-center gap-2 shrink-0">
 
                     <button
                       onClick={() => handleEditStart(comment)}
-                      className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-[#006eff] text-slate-500 flex items-center justify-center transition"
+                      className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-[#006eff] text-slate-500 dark:text-slate-400 flex items-center justify-center transition"
                     >
                       <FaPen size={11} />
                     </button>
@@ -328,22 +323,17 @@ const CommentsSection = ({ ideaId, session }) => {
                       onClick={() =>
                         handleDelete(comment._id)
                       }
-                      className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-500 text-slate-500 flex items-center justify-center transition"
+                      className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 text-slate-500 dark:text-slate-400 flex items-center justify-center transition"
                     >
                       <FaTrash size={11} />
                     </button>
-
                   </div>
                 )}
-
               </div>
-
             </div>
           );
         })}
-
       </div>
-
     </div>
   );
 };

@@ -11,7 +11,7 @@ const AddIdeaPage = () => {
 
   const handleAddIdea = async (e) => {
     e.preventDefault();
-    
+
     const formData = new FormData(e.target);
     const ideaData = Object.fromEntries(formData.entries());
 
@@ -22,189 +22,192 @@ const AddIdeaPage = () => {
     if (result) {
       toast.success("Your idea added successfully!");
       e.target.reset();
-      router.push('/ideas');
+      router.push("/ideas");
     }
   };
 
   return (
-    <div className="w-full bg-slate-50 min-h-screen py-12 text-slate-800">
-      <div className="w-11/12 max-w-4xl mx-auto bg-white border border-slate-200 p-6 md:p-10 rounded-3xl shadow-sm space-y-8">
+    <div className="w-full min-h-screen py-12 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+      
+      <div className="w-11/12 max-w-4xl mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-10 rounded-3xl shadow-sm space-y-8 transition-colors duration-300">
         
-        {/* Page Header */}
-        <div className="border-b border-slate-100 pb-5 space-y-2">
-          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">
+        <div className="border-b border-slate-100 dark:border-slate-800 pb-5 space-y-2">
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
             Share Your Startup Concept
           </h1>
-          <p className="text-slate-500 text-sm">
+
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
             Fill out the structured segments below to vault your idea and gather validation from the community.
           </p>
         </div>
 
-        {/* Form  */}
+        {/* Form */}
         <form onSubmit={handleAddIdea} className="space-y-6">
           
-          {/* Grid Container  */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* 1. Idea Title */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+
+            {/* Idea Title */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Idea Title <span className="text-red-500">*</span>
               </label>
-              <input 
-                type="text" 
-                name="ideaTitle" 
+
+              <input
+                type="text"
+                name="ideaTitle"
                 required
-                placeholder="e.g., AI Crop Disease Detector" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+                placeholder="e.g., AI Crop Disease Detector"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 2. Category Dropdown */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Category */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Category <span className="text-red-500">*</span>
               </label>
-              <select 
-                name="category" 
+
+              <select
+                name="category"
                 required
                 defaultValue=""
-                className="select select-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl text-slate-600"
+                className="w-full select select-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl text-slate-600 dark:text-slate-300"
               >
                 <option value="" disabled>Select</option>
                 <option value="Technology">Technology</option>
                 <option value="Healthcare">Healthcare</option>
-                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                <option value="Artificial Intelligence">AI</option>
                 <option value="Education">Education</option>
                 <option value="FinTech">FinTech</option>
                 <option value="Sustainability">Sustainability</option>
               </select>
             </div>
 
-            {/* 3. Short Description */}
-            <div className="form-control w-full space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Short Description */}
+            <div className="md:col-span-2 space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Short Description <span className="text-red-500">*</span>
               </label>
-              <input 
-                type="text" 
-                name="shortDescription" 
+
+              <input
+                type="text"
+                name="shortDescription"
                 required
-                placeholder="A precise one-line punchline of your startup concept" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+                placeholder="A precise one-line punchline"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 4. Image URL */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Image URL <span className="text-red-500">*</span>
+            {/* Image URL */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Image URL
               </label>
-              <input 
-                type="url" 
+
+              <input
+                type="url"
                 name="imageURL"
-                required
-                placeholder="https://example.com/image.jpg" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+                placeholder="https://example.com/image.jpg"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 5. Target Audience */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Target Audience */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Target Audience <span className="text-red-500">*</span>
               </label>
-              <input 
-                type="text" 
-                name="targetAudience" 
+
+              <input
+                type="text"
+                name="targetAudience"
                 required
-                placeholder="e.g., Local Farmers, University Students" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+                placeholder="e.g., Students, Farmers"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 6. Estimated Budget */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Estimated Budget <span className="text-slate-400">(Optional)</span>
+            {/* Budget */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                Estimated Budget (Optional)
               </label>
-              <input 
-                type="text" 
-                name="estimatedBudget" 
-                placeholder="e.g., $5,000" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+
+              <input
+                type="text"
+                name="estimatedBudget"
+                placeholder="e.g., 5000"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 7. Tags */}
-            <div className="form-control w-full space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Tags <span className="text-slate-400">(Optional)</span>
+            {/* Tags */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                Tags (Optional)
               </label>
-              <input 
-                type="text" 
-                name="tags" 
-                placeholder="e.g., ai, agritech, automation" 
-                className="input input-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl"
+
+              <input
+                type="text"
+                name="tags"
+                placeholder="ai, startup, tech"
+                className="w-full input input-bordered bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 8. Problem Statement */}
-            <div className="form-control w-full space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Problem */}
+            <div className="md:col-span-2 space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">
                 Problem Statement <span className="text-red-500">*</span>
               </label>
-              <textarea 
+
+              <textarea
                 name="problemStatement"
                 required
-                rows="3"
-                placeholder="Clearly describe the exact problem or paint point your audience is facing..." 
-                className="textarea textarea-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl leading-relaxed resize-none"
+                rows={3}
+                className="textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 9. Proposed Solution */}
-            <div className="form-control w-full space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Solution */}
+            <div className="md:col-span-2 space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">
                 Proposed Solution <span className="text-red-500">*</span>
               </label>
-              <textarea 
-                name="proposedSolution" 
+
+              <textarea
+                name="proposedSolution"
                 required
-                rows="3"
-                placeholder="Detail how your concept addresses the problem seamlessly..." 
-                className="textarea textarea-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl leading-relaxed resize-none"
+                rows={3}
+                className="textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
 
-            {/* 10. Detailed Description */}
-            <div className="form-control w-full space-y-1.5 md:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            {/* Details */}
+            <div className="md:col-span-2 space-y-1.5">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400">
                 Detailed Description <span className="text-red-500">*</span>
               </label>
-              <textarea 
-                name="detailedDescription" 
+
+              <textarea
+                name="detailedDescription"
                 required
-                rows="4"
-                placeholder="Provide a comprehensive operational roadmap of your startup concept..." 
-                className="textarea textarea-bordered w-full bg-slate-50 border-slate-200 focus:border-[#006eff] focus:bg-white text-sm rounded-xl leading-relaxed resize-none"
+                rows={4}
+                className="textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus:border-[#006eff] text-sm rounded-xl"
               />
             </div>
-
           </div>
 
-          {/* Submit Button */}
-          <div className="pt-4 border-t border-slate-100 flex justify-end">
-            <button 
-              type="submit" 
-              className="btn bg-[#006eff] hover:bg-[#005fd8] text-white border-none px-8 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-blue-600/20 w-full md:w-auto py-3.5 h-auto min-h-0"
+          {/* Submit */}
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+            <button
+              type="submit"
+              className="w-full md:w-auto px-8 py-3 rounded-xl font-bold text-white bg-[#006eff] hover:bg-[#005fd8] transition shadow-md"
             >
               Submit Concept
             </button>
           </div>
-
         </form>
-
       </div>
     </div>
   );
