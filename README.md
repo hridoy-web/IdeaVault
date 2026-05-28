@@ -68,11 +68,8 @@ IdeaVault is a modern full-stack web application where users can share startup i
 
 ### Frontend
 - Next.js
-- React.js
 - Tailwind CSS
 - DaisyUI
-- React Hook Form
-- Axios
 - React Hot Toast
 
 ### Backend
@@ -80,7 +77,6 @@ IdeaVault is a modern full-stack web application where users can share startup i
 - Express.js
 - MongoDB
 - JWT Authentication
-- Mongoose
 
 ---
 
