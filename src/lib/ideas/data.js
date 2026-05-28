@@ -1,13 +1,25 @@
 // fetch all ideas
 export const fetchIdeas = async (search = '', category = 'All') => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/ideas?search=${search}`;
-    if (category !== 'All') {
-        url = url + `&category=${category}`;
+    try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/ideas?search=${search}&category=${category}`;
+
+        // console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+        // console.log("FULL URL:", url);
+        const res = await fetch(url);
+        // console.log("response:", res.status);
+        if (!res.ok) {
+            throw new Error("Failed to fetch");
+        }
+        const data = await res.json();
+        // console.log("fetch data:", data);
+        return data;
+
+    } catch (error) {
+        console.error("fetch error:", error);
+        return [];
     }
-    const res = await fetch(url);
-    const data = await res.json();
-    return data;
 }
+
 
 // fetch trending ideas
 export const fetchTrendingIdeas = async () => {

@@ -2,50 +2,58 @@
 
 import { signUp, signIn } from "@/lib/auth-client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
-  const router = useRouter();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+const handleRegister = async (e) => {
 
-    const formData = new FormData(e.currentTarget);
-    const { name, email, image, password } =
-      Object.fromEntries(formData.entries());
+  e.preventDefault();
 
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters long!");
-      return;
-    }
+  const formData = new FormData(e.currentTarget);
 
-    if (!/[A-Z]/.test(password)) {
-      toast.error("Password must include at least one uppercase letter!");
-      return;
-    }
+  const { name, email, image, password } =
+    Object.fromEntries(formData.entries());
 
-    if (!/[a-z]/.test(password)) {
-      toast.error("Password must include at least one lowercase letter!");
-      return;
-    }
+  if (password.length < 6) {
+    toast.error("Password must be at least 6 characters long!");
+    return;
+  }
 
-    const { error } = await signUp.email({
-      name,
-      email,
-      password,
-      image,
-    });
+  if (!/[A-Z]/.test(password)) {
+    toast.error("Password must include at least one uppercase letter!");
+    return;
+  }
 
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
+  if (!/[a-z]/.test(password)) {
+    toast.error("Password must include at least one lowercase letter!");
+    return;
+  }
 
-    toast.success("Registration successful!");
-    router.push("/");
-  };
+  const { error } = await signUp.email({
+    name,
+    email,
+    password,
+    image,
+  });
+
+  if (error) {
+    toast.error(error.message);
+    return;
+  }
+  const loginResult = await signIn.email({
+    email,
+    password,
+  });
+
+  if (loginResult.error) {
+    toast.error(loginResult.error.message);
+    return;
+  }
+  toast.success("Registration successful!");
+  window.location.href = "/";
+};
 
   const handleGoogleRegister = async () => {
     try {

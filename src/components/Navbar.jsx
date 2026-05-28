@@ -51,20 +51,62 @@ const Navbar = () => {
           </li>
         </>
       )}
+
+      <div className="lg:hidden mt-3 border-t border-slate-200 dark:border-slate-700 pt-3 space-y-2">
+
+        <ThemeToggle />
+
+        {!user ? (
+          <>
+            <Link
+              href="/login"
+              className="block text-center px-4 py-2 rounded-xl font-bold text-sm border border-blue-600 text-blue-600"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/register"
+              className="block text-center px-4 py-2 rounded-xl font-bold text-sm bg-blue-600 text-white"
+            >
+              SignUp
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href="/profile">
+              <button className="w-full py-2 text-sm font-bold text-blue-600 bg-blue-50 rounded-lg">
+                My Profile
+              </button>
+            </Link>
+
+            <button
+              onClick={handleLogOut}
+              className="w-full py-2 text-sm font-bold text-red-600 bg-red-50 rounded-lg"
+            >
+              Log Out
+            </button>
+          </>
+        )}
+      </div>
     </>
   );
 
   return (
     <div className="w-full bg-white/70 dark:bg-slate-950/70 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/60 sticky top-0 z-50 shadow-[0_2px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)] transition-colors duration-300">
-      
-      <div className="navbar w-11/12 mx-auto h-16">
+
+      <div className="navbar w-11/12 mx-auto min-h-16 flex items-center justify-between">
 
         {/* LEFT */}
         <div className="navbar-start gap-2">
 
           {/* Mobile menu */}
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="lg:hidden pr-2 text-slate-700 dark:text-slate-200">
+            <div
+              tabIndex={0}
+              role="button"
+              className="lg:hidden pr-2 text-slate-700 dark:text-slate-200"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -81,7 +123,7 @@ const Navbar = () => {
               </svg>
             </div>
 
-            <ul className="menu menu-sm dropdown-content bg-white dark:bg-slate-900 backdrop-blur-md rounded-xl mt-3 w-52 p-2 shadow-xl border border-slate-200 dark:border-slate-800">
+            <ul className="menu menu-sm dropdown-content bg-white dark:bg-slate-900 backdrop-blur-md rounded-xl mt-3 w-52 p-3 shadow-xl border border-slate-200 dark:border-slate-800">
               {navLinks}
             </ul>
           </div>
@@ -112,7 +154,7 @@ const Navbar = () => {
         </div>
 
         {/* RIGHT */}
-        <div className="navbar-end gap-2">
+        <div className="navbar-end gap-2 hidden lg:flex">
 
           <ThemeToggle />
 
@@ -161,7 +203,7 @@ const Navbar = () => {
               </div>
 
               <div className="dropdown-content mt-3 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl rounded-xl p-4">
-                
+
                 <div className="mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                   <p className="font-bold text-sm text-slate-900 dark:text-white truncate">
                     {user?.name}

@@ -1,6 +1,6 @@
 "use client";
 
-import ProfileUpdateModal from "@/components/Ui/ProfileUpdateModal";
+import ProfileUpdateModal from "@/components/UI/ProfileUpdateModal";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 

@@ -25,11 +25,13 @@ const IdeaDetailsPage = async ({ params }) => {
   });
 
   if (!session?.user) {
-  redirect("/login");
-}
+    redirect("/login");
+  }
 
   const token = tokenData?.token || tokenData;
   const idea = await singleIdeas(id, token);
+
+  // console.log("Token value:", token);
 
   const {
     ideaTitle,
@@ -46,7 +48,7 @@ const IdeaDetailsPage = async ({ params }) => {
 
   return (
     <div className="w-full bg-white dark:bg-slate-950 text-black dark:text-white min-h-screen py-12 antialiased transition-colors duration-300">
-      
+
       <div className="w-11/12 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* Left Column */}
@@ -56,7 +58,7 @@ const IdeaDetailsPage = async ({ params }) => {
 
             {/* Image Section */}
             <div className="w-full h-64 md:h-96 relative rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
-              
+
               <Image
                 src={
                   imageURL ||
@@ -139,25 +141,25 @@ const IdeaDetailsPage = async ({ params }) => {
 
                 {typeof tags === "string"
                   ? tags.split(",").map(
-                      (tag, index) =>
-                        tag.trim() && (
-                          <span
-                            key={index}
-                            className="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700 px-3 py-1 rounded-lg font-medium transition-colors"
-                          >
-                            #{tag.trim()}
-                          </span>
-                        )
-                    )
+                    (tag, index) =>
+                      tag.trim() && (
+                        <span
+                          key={index}
+                          className="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700 px-3 py-1 rounded-lg font-medium transition-colors"
+                        >
+                          #{tag.trim()}
+                        </span>
+                      )
+                  )
                   : Array.isArray(tags) &&
-                    tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700 px-3 py-1 rounded-lg font-medium transition-colors"
-                      >
-                        #{tag.trim()}
-                      </span>
-                    ))}
+                  tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700 px-3 py-1 rounded-lg font-medium transition-colors"
+                    >
+                      #{tag.trim()}
+                    </span>
+                  ))}
               </div>
             )}
           </div>

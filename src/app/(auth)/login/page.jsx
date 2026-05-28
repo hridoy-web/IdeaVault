@@ -2,12 +2,10 @@
 
 import { signIn } from "@/lib/auth-client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
-  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,8 +23,7 @@ const LoginPage = () => {
     }
 
     toast.success("Successfully logged in!");
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   };
 
   const handleGoogleLogin = async () => {

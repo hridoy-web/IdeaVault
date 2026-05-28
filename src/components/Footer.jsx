@@ -28,7 +28,7 @@ const Footer = () => {
             <div className="flex flex-col space-y-2 text-sm">
               <Link href="/" className="hover:text-white transition-colors duration-200 w-fit">Home</Link>
               <Link href="/ideas" className="hover:text-white transition-colors duration-200 w-fit">Ideas</Link>
-              <Link href="/categories" className="hover:text-white transition-colors duration-200 w-fit">Categories</Link>
+              <Link href="/" className="hover:text-white transition-colors duration-200 w-fit">Categories</Link>
             </div>
           </div>
 
