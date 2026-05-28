@@ -109,5 +109,3 @@ IdeaVault is a modern full-stack web application where users can share startup i
 MERN Stack Developer (Aspiring Full Stack Developer)
 
 ---
-
-***This project is created for educational purposes***
