@@ -116,3 +116,15 @@ git clone https://github.com/hridoy-web/IdeaVault
 cd IdeaVault
 npm install
 npm run dev
+
+---
+
+### Server Setup
+
+```bash
+git clone https://github.com/hridoy-web/IdeaVault-Server
+cd IdeaVault-Server
+npm install
+npm run dev
+
+---
