@@ -107,4 +107,7 @@ IdeaVault is a modern full-stack web application where users can share startup i
 
 **Hridoy Chowdhury**  
 MERN Stack Developer (Aspiring Full Stack Developer)
-**This project is created for educational purposes**
+
+---
+
+***This project is created for educational purposes***
